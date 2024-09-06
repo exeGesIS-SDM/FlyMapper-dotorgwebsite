@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Linq;
 
-namespace FlyMapper_dotorgwebsite4
+namespace FlyMapperOrg
 {
     public class Program
     {
@@ -15,14 +15,15 @@ namespace FlyMapper_dotorgwebsite4
         {
             var hostBuilder = CreateHostBuilder(args);
             var host = hostBuilder.Build();
+            IConfiguration config;
 
             using (var scope = host.Services.CreateScope())
             {
                 var scopedServices = scope.ServiceProvider;
+                config = scopedServices.GetRequiredService<IConfiguration>();
                 try
                 {
                     EnsureDataStorageIsReady(scopedServices);
-
                 }
                 catch (Exception ex)
                 {
@@ -33,7 +34,6 @@ namespace FlyMapper_dotorgwebsite4
 
             var env = host.Services.GetRequiredService<IWebHostEnvironment>();
             var loggerFactory = host.Services.GetRequiredService<ILoggerFactory>();
-            var config = host.Services.GetRequiredService<IConfiguration>();
             ConfigureLogging(env, loggerFactory, host.Services, config);
 
             host.Run();
@@ -48,14 +48,11 @@ namespace FlyMapper_dotorgwebsite4
 
         private static void EnsureDataStorageIsReady(IServiceProvider scopedServices)
         {
-            var deleteLogsOlderThanDays = 90;
-            LoggingEFStartup.InitializeDatabaseAsync(scopedServices, deleteLogsOlderThanDays).Wait();
+            var deletePostsOlderThanDays = 90;
+            LoggingEFStartup.InitializeDatabaseAsync(scopedServices, deletePostsOlderThanDays).Wait();
             CoreEFStartup.InitializeDatabaseAsync(scopedServices).Wait();
             SimpleContentEFStartup.InitializeDatabaseAsync(scopedServices).Wait();
-
-
-
-
+            DynamicPolicyEFCore.InitializeDatabaseAsync(scopedServices).Wait();
         }
 
         private static void ConfigureLogging(
@@ -118,8 +115,5 @@ namespace FlyMapper_dotorgwebsite4
 
             loggerFactory.AddDbLogger(serviceProvider, logFilter);
         }
-
     }
-
-
 }

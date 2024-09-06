@@ -3,8 +3,8 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:18967/",
-      "sslPort": 44327
+      "applicationUrl": "http://localhost:50452/",
+      "sslPort": 44330
     }
   },
   "profiles": {
@@ -22,18 +22,18 @@
         "ASPNETCORE_ENVIRONMENT": "Production"
       }
     },
-    "FlyMapper_dotorgwebsite4 - Development": {
+    "FlyMapperOrg - Development": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:44327;http://localhost:18967",
+      "applicationUrl": "https://localhost:44330;http://localhost:50452",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "FlyMapper_dotorgwebsite4 - Production": {
+    "FlyMapperOrg - Production": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://localhost:44327;http://localhost:18967",
+      "applicationUrl": "https://localhost:44330;http://localhost:50452",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
       }

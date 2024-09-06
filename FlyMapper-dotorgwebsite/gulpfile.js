@@ -5,7 +5,7 @@ var gulp = require("gulp"),
     cssmin = require("gulp-cssmin"),
     gp_rename = require('gulp-rename'),
     uglify = require("gulp-uglify"),
-    sass = require('gulp-sass'),
+    sass = require('gulp-sass')(require('sass')),
     sourcemaps = require('gulp-sourcemaps'),
     merge = require('merge-stream')
 ;
@@ -38,5 +38,5 @@ gulp.task('buildCustom1ThemeCss', function () {
 // if you run the default task it will watch for changes in files and then run the
 // array of tasks if any files changed. So for scss changes you can just refresh the page to see changes
 gulp.task('default', function () {
-    gulp.watch(config.srcFileWatchPattern, ['buildCustom1ThemeCss']);
+    gulp.watch(config.srcFileWatchPattern, gulp.series('buildCustom1ThemeCss'));
 });

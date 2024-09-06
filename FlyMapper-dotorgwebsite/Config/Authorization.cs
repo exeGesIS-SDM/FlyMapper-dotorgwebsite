@@ -11,39 +11,44 @@ namespace Microsoft.Extensions.DependencyInjection
 
             options.AddCloudscribeLoggingDefaultPolicy();
 
-            options.AddCloudscribeCoreDefaultPolicies();
 
-            options.AddCloudscribeCoreSimpleContentIntegrationDefaultPolicies();
 
 
             options.AddPolicy(
-                "FileManagerPolicy",
+                "ServerAdminPolicy",
                 authBuilder =>
                 {
-                    authBuilder.RequireRole("Administrators", "Content Administrators");
+                    authBuilder.RequireRole("ServerAdmins");
+
                 });
 
+            // probably best to not let anyone change the main admin policy from the UI
             options.AddPolicy(
-                "FileUploadPolicy",
+                "AdminPolicy",
                 authBuilder =>
                 {
-                    authBuilder.RequireRole("Administrators", "Content Administrators");
+                    authBuilder.RequireRole("ServerAdmins", "Administrators");
                 });
 
+            // you could comment this out if you want admins from any site to be able
+            // to edit globally shared country state data
+            // by commenting this out the policy could be managed per tenant from the UI
+            // but it is probably best to only let this be managed from the master tenant
             options.AddPolicy(
-                "FileManagerDeletePolicy",
+                "CoreDataPolicy",
                 authBuilder =>
                 {
-                    authBuilder.RequireRole("Administrators", "Content Administrators");
+                    authBuilder.RequireRole("ServerAdmins");
                 });
 
-
-
-
-
-
-
-
+            // probably best and recommended to not let this policy be managed from the UI
+            // since this policy controls who can manage policies from the UI
+            options.AddPolicy(
+                "PolicyManagementPolicy",
+                authBuilder =>
+                {
+                    authBuilder.RequireRole("Administrators");
+                });
 
 
 

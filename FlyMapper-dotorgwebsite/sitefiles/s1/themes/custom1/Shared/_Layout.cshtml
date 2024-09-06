@@ -36,13 +36,15 @@
     {
         <link rel="stylesheet" href="~/css/ie11.css" />
     }
-    @RenderSection("Styles", required: false)
+    @RenderSection("Styles", required: false)    
+    
+    
     <google-analytics profile-id="@Tenant.GoogleAnalyticsProfileId" user-id="@User.GetUserId()"></google-analytics>
     <base href="@Context.Request.Path" />
 </head>
 <body class="d-flex flex-column @ViewData["BodyClass"] @ieBodyClass">
     <header>
-        <a id="skippy" class="sr-only sr-only-focusable" href="#content">
+        <a id="skippy" class="visually-hidden visually-hidden-focusable" href="#content">
             <div class="container">
                 <span class="skiplink-text">Skip to main content</span>
             </div>
@@ -70,22 +72,23 @@
             </div>
         </div>
         <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark pt-0 pb-0">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse bg-dark pl-2" id="navbarNavDropdown">
-                @await Component.InvokeAsync("Navigation", new { viewName = "Bootstrap4TopNavWithDropdowns", filterName = NamedNavigationFilters.TopNav, startingNodeKey = "" })
+            <div class="collapse navbar-collapse bg-dark ps-2" id="navbarNavDropdown">
+                @await Component.InvokeAsync("Navigation", new { viewName = "Bootstrap5TopNavWithDropdowns", filterName = NamedNavigationFilters.TopNav, startingNodeKey = "" })
                 <partial name="_LoginPartialWithDropdowns" />
             </div>
         </nav>
     </header>
     <div id="wrapper" class="container-fluid cs-container flex-fill">
-        @await Component.InvokeAsync("Navigation", new { viewName = "Bootstrap4Breadcrumbs", filterName = NamedNavigationFilters.Breadcrumbs, startingNodeKey = "" })
+        @await Component.InvokeAsync("Navigation", new { viewName = "Bootstrap5Breadcrumbs", filterName = NamedNavigationFilters.Breadcrumbs, startingNodeKey = "" })
         <div class="row">
             <main id="content" class="col order-3">
                 <partial name="AlertsPartial" />
                 <partial name="_CookieConsentPartial" />
+                <partial name="_AutoLogoutWarningPartial" />
                 @RenderBody()
             </main>
             @if (sideNavVisible)
@@ -114,33 +117,8 @@
     <footer class="sticky-bottom border pt-2 h-100">
         <div class="w-100 text-center">
             <partial name="SiteFooterPartial" />
-        </div>
-        <div class="d-flex flex-wrap flex-grow justify-content-center">
-            <div class="p-2">
-            <ul class="list-unstyled d-flex flex-wrap">
-                <li class=" mr-2">
-                    <a class="text-nowrap" href="@siteRoot/sitemap">Site Map</a>
-                </li>
-                @if (Tenant != null && !string.IsNullOrWhiteSpace(Tenant.PrivacyPolicy))
-                {
-                    <li class="border-left pl-2 mr-2">
-                        <a asp-controller="Privacy" asp-action="Index">Privacy Policy</a>
-                    </li>
-                }
-                 <li class="border-left pl-2 mr-2">
-                    <a href="@siteRoot/contact">Contact</a>
-                </li>
-                <li class="border-left pl-2 mr-2">
-                    @* you are free to remove the powered by cloudscribe link but we appreciate it if you choose to keep it! *@
-                    <a class="text-nowrap" target="_blank" href="https://www.cloudscribe.com/?utm_source=@Context.Request.Host.Value&amp;utm_medium=referral&amp;utm_campaign=poweredbycloudscribe">Powered by cloudscribe</a>
-                </li>
-            </ul>
-        </div>
-        <div class="pl-sm-2  text-center w-100"><span class="text-nowrap">Copyright &copy; @DateTime.Now.Year</span><span class="d-none d-sm-inline"> - </span><span> @(Tenant?.SiteName ?? "Sample")</span></div>
-        <partial name="_CookieConsentRevokePartial" />
-
-        </div>
-        
+            <partial name="_CookieConsentRevokePartial" />
+        </div>      
     </footer>
     @RenderSection("Toolbar", required: false)
     <environment names="Development">
@@ -155,6 +133,7 @@
     </environment>
     @RenderSection("Bottom", required: false)
     @RenderSection("Scripts", required: false)
+    @Html.RenderResources("js") @*render any js resources declared via helpers in partial views etc*@
     <add-this profile-id="@Tenant.AddThisDotComUsername" async></add-this>
 </body>
 </html>
